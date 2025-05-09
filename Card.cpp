@@ -92,8 +92,8 @@ namespace Trick
 		// now, finding the picked card is easy because of the trick
 		// that we cut the deck, looked at the bottom of the first cut as the picked card
 		// then shuffle both cuts, rotate the first cut and merge it back into the deck.
-
-		// the picked card will be the largest number / position index of all the rotated cards
+		// the picked card will be the largest id of all the rotated cards
+		
 		// init it to be the first position
 		unsigned int pickedCardId = 0;
 		Card pickedCard = cards[0];
