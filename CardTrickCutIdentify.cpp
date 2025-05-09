@@ -1,0 +1,67 @@
+// CardTrickCutIdentify.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include <iostream>
+#include <random>
+#include <algorithm>
+
+#include "Card.h"
+
+int main()
+{
+    std::random_device randomDevice;
+    std::mt19937 randomGenerator(randomDevice());
+
+    std::cout << "Welcome to the Card Trick" << std::endl;
+
+
+    std::cout << "Get a deck of cards" << std::endl;
+    // get an ordered deck of cards
+    auto cards = Trick::GetOrderedCards();
+
+    srand(time(NULL));
+    int randomPos = 1 + (rand() % (cards.size() - 1));
+
+    std::cout << "Cut the cards at random position: " << randomPos << std::endl;
+
+    auto pickedCard = cards[randomPos - 1];
+    std::cout << "Look at the botton of the first cut: (Secret) " << pickedCard.mName << std::endl;
+    auto cutIterator = cards.begin() + randomPos;
+
+    std::cout << "Shufflle the first cut." << std::endl;
+    std::shuffle(cards.begin(), cutIterator, randomGenerator);
+
+    std::cout << "Shufflle the second cut." << std::endl;
+    std::shuffle(cutIterator, cards.end(), randomGenerator);
+
+    std::cout << "Rotate the first cut and then merge shuffle into the second cut." << std::endl;
+
+    // rotate the first cut
+    std::for_each(cards.begin(), cutIterator, [](auto& card) {
+        card.mOrientation = Trick::DOWN;
+        });
+
+    // shuffle everything together
+    std::shuffle(cards.begin(), cards.end(), randomGenerator);
+
+    std::cout << "Cards are now all shuffled together" << std::endl;
+    Trick::PrintCards(cards);
+
+    std::cout << "Find the picked card." << std::endl;
+    // find the picked card
+    auto foundPickedCard = Trick::FindPickedCard(cards);
+
+    std::cout << "Actual Picked Card: " << pickedCard.mName << std::endl;
+    std::cout << " Found Picked Card: " << foundPickedCard.mName << std::endl;
+}
+
+// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
+// Debug program: F5 or Debug > Start Debugging menu
+
+// Tips for Getting Started: 
+//   1. Use the Solution Explorer window to add/manage files
+//   2. Use the Team Explorer window to connect to source control
+//   3. Use the Output window to see build output and other messages
+//   4. Use the Error List window to view errors
+//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
+//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
